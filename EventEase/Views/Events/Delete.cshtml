@@ -1,0 +1,60 @@
+@model EventEase.Models.Event
+@{
+    ViewData["Title"] = "Delete Event";
+    bool hasBookings = ViewBag.HasBookings == true;
+}
+
+<div class="row justify-content-center">
+    <div class="col-lg-6">
+        <div class="card border-0 shadow-sm">
+            <div class="card-header bg-danger text-white fw-semibold">
+                <i class="bi bi-exclamation-triangle-fill me-2"></i>Delete Event
+            </div>
+            <div class="card-body p-4">
+                @if (hasBookings)
+                {
+                    <div class="alert alert-danger d-flex gap-2">
+                        <i class="bi bi-shield-exclamation fs-5 flex-shrink-0"></i>
+                        <div>
+                            <strong>Cannot delete this event.</strong><br />
+                            This event has existing bookings. You must cancel all associated bookings before deleting the event.
+                        </div>
+                    </div>
+                }
+                else
+                {
+                    <div class="alert alert-warning d-flex gap-2">
+                        <i class="bi bi-exclamation-triangle fs-5 flex-shrink-0"></i>
+                        <div>Are you sure you want to permanently delete this event? This action cannot be undone.</div>
+                    </div>
+                }
+
+                <dl class="row">
+                    <dt class="col-sm-4">Name</dt>
+                    <dd class="col-sm-8 fw-bold">@Model.Name</dd>
+
+                    <dt class="col-sm-4">Start Date</dt>
+                    <dd class="col-sm-8">@Model.StartDate.ToString("dd MMMM yyyy")</dd>
+
+                    <dt class="col-sm-4">End Date</dt>
+                    <dd class="col-sm-8">@Model.EndDate.ToString("dd MMMM yyyy")</dd>
+                </dl>
+
+                <div class="d-flex gap-2 mt-3">
+                    @if (!hasBookings)
+                    {
+                        <form asp-action="Delete" method="post">
+                            <input asp-for="EventId" type="hidden" />
+                            <button type="submit" class="btn btn-danger">
+                                <i class="bi bi-trash me-2"></i>Yes, Delete
+                            </button>
+                        </form>
+                    }
+                    <a asp-action="Index" class="btn btn-outline-secondary">
+                        <i class="bi bi-arrow-left me-2"></i>@(hasBookings ? "Back to Events" : "Cancel")
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

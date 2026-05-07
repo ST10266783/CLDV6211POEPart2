@@ -1,0 +1,102 @@
+@model EventEase.Models.Booking
+@{
+    ViewData["Title"] = "New Booking";
+}
+
+<div class="row justify-content-center">
+    <div class="col-lg-8">
+        <div class="card border-0 shadow-sm">
+            <div class="card-header bg-transparent fw-semibold fs-5 border-bottom">
+                <i class="bi bi-journal-plus me-2 text-primary"></i>Create New Booking
+            </div>
+            <div class="card-body p-4">
+                <form asp-action="Create" method="post">
+                    <div asp-validation-summary="ModelOnly" class="alert alert-danger" role="alert"></div>
+
+                    <!-- Venue & Event Selection -->
+                    <div class="row g-3 mb-3">
+                        <div class="col-md-6">
+                            <label asp-for="VenueId" class="form-label fw-semibold">Venue <span class="text-danger">*</span></label>
+                            <select asp-for="VenueId" class="form-select" asp-items="@((IEnumerable<Microsoft.AspNetCore.Mvc.Rendering.SelectListItem>)ViewBag.Venues)">
+                                <option value="">— Select a Venue —</option>
+                            </select>
+                            <span asp-validation-for="VenueId" class="text-danger small"></span>
+                            <div class="form-text">Venues marked as unavailable are disabled.</div>
+                        </div>
+                        <div class="col-md-6">
+                            <label asp-for="EventId" class="form-label fw-semibold">Event <span class="text-danger">*</span></label>
+                            <select asp-for="EventId" class="form-select" asp-items="@((IEnumerable<Microsoft.AspNetCore.Mvc.Rendering.SelectListItem>)ViewBag.Events)">
+                                <option value="">— Select an Event —</option>
+                            </select>
+                            <span asp-validation-for="EventId" class="text-danger small"></span>
+                        </div>
+                    </div>
+
+                    <!-- Booking Dates -->
+                    <div class="row g-3 mb-3">
+                        <div class="col-md-6">
+                            <label asp-for="StartDate" class="form-label fw-semibold"></label>
+                            <input asp-for="StartDate" class="form-control" type="datetime-local" />
+                            <span asp-validation-for="StartDate" class="text-danger small"></span>
+                        </div>
+                        <div class="col-md-6">
+                            <label asp-for="EndDate" class="form-label fw-semibold"></label>
+                            <input asp-for="EndDate" class="form-control" type="datetime-local" />
+                            <span asp-validation-for="EndDate" class="text-danger small"></span>
+                        </div>
+                    </div>
+
+                    <hr class="my-3" />
+                    <h6 class="fw-semibold mb-3 text-muted"><i class="bi bi-person me-2"></i>Customer Details</h6>
+
+                    <!-- Customer Info -->
+                    <div class="row g-3 mb-3">
+                        <div class="col-md-6">
+                            <label asp-for="CustomerName" class="form-label fw-semibold"></label>
+                            <input asp-for="CustomerName" class="form-control" placeholder="Full Name" />
+                            <span asp-validation-for="CustomerName" class="text-danger small"></span>
+                        </div>
+                        <div class="col-md-6">
+                            <label asp-for="CustomerEmail" class="form-label fw-semibold"></label>
+                            <input asp-for="CustomerEmail" class="form-control" type="email" placeholder="email@example.com" />
+                            <span asp-validation-for="CustomerEmail" class="text-danger small"></span>
+                        </div>
+                    </div>
+
+                    <div class="row g-3 mb-3">
+                        <div class="col-md-6">
+                            <label asp-for="CustomerPhone" class="form-label fw-semibold"></label>
+                            <input asp-for="CustomerPhone" class="form-control" placeholder="+27 xx xxx xxxx" />
+                            <span asp-validation-for="CustomerPhone" class="text-danger small"></span>
+                        </div>
+                    </div>
+
+                    <div class="mb-4">
+                        <label asp-for="Notes" class="form-label fw-semibold"></label>
+                        <textarea asp-for="Notes" class="form-control" rows="2"
+                                  placeholder="Optional — any special requirements or notes"></textarea>
+                        <span asp-validation-for="Notes" class="text-danger small"></span>
+                    </div>
+
+                    <div class="d-flex gap-2">
+                        <button type="submit" class="btn btn-primary">
+                            <i class="bi bi-check-circle me-2"></i>Confirm Booking
+                        </button>
+                        <a asp-action="Index" class="btn btn-outline-secondary">
+                            <i class="bi bi-arrow-left me-2"></i>Cancel
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+<script>
+    // Auto-fill end date when event changes
+    document.querySelector('[name="EventId"]').addEventListener('change', function () {
+        // Optionally pre-fill dates from selected event if needed
+    });
+</script>
+}

@@ -1,0 +1,127 @@
+@model EventEase.Models.Booking
+@{
+    ViewData["Title"] = Model.BookingReference;
+}
+
+<div class="mb-3">
+    <a asp-action="Index" class="btn btn-outline-secondary btn-sm">
+        <i class="bi bi-arrow-left me-1"></i>Back to Bookings
+    </a>
+</div>
+
+<div class="row g-4">
+    <!-- Booking Info -->
+    <div class="col-lg-6">
+        <div class="card border-0 shadow-sm h-100">
+            <div class="card-header bg-transparent fw-semibold d-flex justify-content-between align-items-center">
+                <span><i class="bi bi-journal-text me-2 text-primary"></i>Booking Details</span>
+                <span class="badge bg-primary fs-6">@Model.BookingReference</span>
+            </div>
+            <div class="card-body p-4">
+                <dl class="row">
+                    <dt class="col-sm-5 text-muted">Booking Date</dt>
+                    <dd class="col-sm-7">@Model.BookingDate.ToString("dd MMMM yyyy HH:mm")</dd>
+
+                    <dt class="col-sm-5 text-muted">Venue Start</dt>
+                    <dd class="col-sm-7">@Model.StartDate.ToString("dd MMMM yyyy HH:mm")</dd>
+
+                    <dt class="col-sm-5 text-muted">Venue End</dt>
+                    <dd class="col-sm-7">@Model.EndDate.ToString("dd MMMM yyyy HH:mm")</dd>
+
+                    <dt class="col-sm-5 text-muted">Duration</dt>
+                    <dd class="col-sm-7">@((Model.EndDate - Model.StartDate).Days) day(s)</dd>
+
+                    <dt class="col-sm-5 text-muted">Notes</dt>
+                    <dd class="col-sm-7">@(string.IsNullOrWhiteSpace(Model.Notes) ? "—" : Model.Notes)</dd>
+                </dl>
+            </div>
+        </div>
+    </div>
+
+    <!-- Customer Info -->
+    <div class="col-lg-6">
+        <div class="card border-0 shadow-sm h-100">
+            <div class="card-header bg-transparent fw-semibold">
+                <i class="bi bi-person me-2 text-primary"></i>Customer Details
+            </div>
+            <div class="card-body p-4">
+                <dl class="row">
+                    <dt class="col-sm-4 text-muted">Name</dt>
+                    <dd class="col-sm-8 fw-semibold">@Model.CustomerName</dd>
+
+                    <dt class="col-sm-4 text-muted">Email</dt>
+                    <dd class="col-sm-8">
+                        <a href="mailto:@Model.CustomerEmail">@Model.CustomerEmail</a>
+                    </dd>
+
+                    <dt class="col-sm-4 text-muted">Phone</dt>
+                    <dd class="col-sm-8">@(string.IsNullOrWhiteSpace(Model.CustomerPhone) ? "—" : Model.CustomerPhone)</dd>
+                </dl>
+            </div>
+        </div>
+    </div>
+
+    <!-- Venue Info -->
+    <div class="col-lg-6">
+        <div class="card border-0 shadow-sm h-100">
+            <div class="card-header bg-transparent fw-semibold">
+                <i class="bi bi-building me-2 text-primary"></i>Venue
+            </div>
+            <div class="card-body p-4">
+                @if (Model.Venue != null)
+                {
+                    <div class="d-flex gap-3 mb-3">
+                        <img src="@Model.Venue.ImageUrl" class="rounded ee-detail-thumb" alt="@Model.Venue.Name" />
+                        <div>
+                            <h5 class="fw-bold mb-1">@Model.Venue.Name</h5>
+                            <p class="text-muted small mb-1"><i class="bi bi-geo-alt me-1"></i>@Model.Venue.Location</p>
+                            <p class="text-muted small mb-0"><i class="bi bi-people me-1"></i>Capacity: @Model.Venue.Capacity.ToString("N0")</p>
+                        </div>
+                    </div>
+                    <a asp-controller="Venues" asp-action="Details" asp-route-id="@Model.VenueId"
+                       class="btn btn-sm btn-outline-primary">View Venue</a>
+                }
+            </div>
+        </div>
+    </div>
+
+    <!-- Event Info -->
+    <div class="col-lg-6">
+        <div class="card border-0 shadow-sm h-100">
+            <div class="card-header bg-transparent fw-semibold">
+                <i class="bi bi-stars me-2 text-primary"></i>Event
+            </div>
+            <div class="card-body p-4">
+                @if (Model.Event != null)
+                {
+                    <div class="d-flex gap-3 mb-3">
+                        <img src="@Model.Event.ImageUrl" class="rounded ee-detail-thumb" alt="@Model.Event.Name" />
+                        <div>
+                            <h5 class="fw-bold mb-1">@Model.Event.Name</h5>
+                            <p class="text-muted small mb-1">
+                                <i class="bi bi-calendar-range me-1"></i>
+                                @Model.Event.StartDate.ToString("dd MMM yyyy") – @Model.Event.EndDate.ToString("dd MMM yyyy")
+                            </p>
+                            @if (!string.IsNullOrWhiteSpace(Model.Event.Description))
+                            {
+                                <p class="text-muted small mb-0">@Model.Event.Description</p>
+                            }
+                        </div>
+                    </div>
+                    <a asp-controller="Events" asp-action="Details" asp-route-id="@Model.EventId"
+                       class="btn btn-sm btn-outline-primary">View Event</a>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Actions -->
+<div class="mt-4 d-flex gap-2">
+    <a asp-action="Edit" asp-route-id="@Model.BookingId" class="btn btn-primary">
+        <i class="bi bi-pencil me-2"></i>Edit Booking
+    </a>
+    <a asp-action="Delete" asp-route-id="@Model.BookingId" class="btn btn-outline-danger ms-auto">
+        <i class="bi bi-trash me-2"></i>Cancel Booking
+    </a>
+</div>

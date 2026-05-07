@@ -1,0 +1,167 @@
+@model IEnumerable<EventEase.Models.Booking>
+@{
+    ViewData["Title"] = "Dashboard";
+}
+
+<!-- Page Header -->
+<div class="d-flex align-items-center justify-content-between mb-4">
+    <div>
+        <h2 class="mb-0 fw-bold">
+            <i class="bi bi-speedometer2 text-primary me-2"></i>Dashboard
+        </h2>
+        <p class="text-muted mb-0 mt-1">Welcome to the EventEase Booking Specialist Portal</p>
+    </div>
+    <span class="badge bg-primary-subtle text-primary border border-primary-subtle px-3 py-2">
+        <i class="bi bi-calendar3 me-1"></i>@DateTime.Now.ToString("dddd, dd MMMM yyyy")
+    </span>
+</div>
+
+<!-- Stat Cards -->
+<div class="row g-3 mb-4">
+    <div class="col-sm-6 col-xl-3">
+        <div class="card ee-stat-card border-0 shadow-sm h-100">
+            <div class="card-body d-flex align-items-center gap-3">
+                <div class="ee-stat-icon bg-primary bg-opacity-10 text-primary rounded-3">
+                    <i class="bi bi-building fs-3"></i>
+                </div>
+                <div>
+                    <div class="fs-2 fw-bold">@ViewBag.VenueCount</div>
+                    <div class="text-muted small">Total Venues</div>
+                    <div class="text-success small"><i class="bi bi-check-circle me-1"></i>@ViewBag.AvailableVenueCount available</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-6 col-xl-3">
+        <div class="card ee-stat-card border-0 shadow-sm h-100">
+            <div class="card-body d-flex align-items-center gap-3">
+                <div class="ee-stat-icon bg-purple bg-opacity-10 text-purple rounded-3">
+                    <i class="bi bi-stars fs-3"></i>
+                </div>
+                <div>
+                    <div class="fs-2 fw-bold">@ViewBag.EventCount</div>
+                    <div class="text-muted small">Total Events</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-6 col-xl-3">
+        <div class="card ee-stat-card border-0 shadow-sm h-100">
+            <div class="card-body d-flex align-items-center gap-3">
+                <div class="ee-stat-icon bg-success bg-opacity-10 text-success rounded-3">
+                    <i class="bi bi-journal-check fs-3"></i>
+                </div>
+                <div>
+                    <div class="fs-2 fw-bold">@ViewBag.BookingCount</div>
+                    <div class="text-muted small">Total Bookings</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-6 col-xl-3">
+        <div class="card ee-stat-card border-0 shadow-sm h-100">
+            <div class="card-body d-flex align-items-center gap-3">
+                <div class="ee-stat-icon bg-warning bg-opacity-10 text-warning rounded-3">
+                    <i class="bi bi-plus-circle fs-3"></i>
+                </div>
+                <div>
+                    <div class="fs-2 fw-bold text-warning">+</div>
+                    <div class="text-muted small">Quick Actions</div>
+                    <a asp-controller="Bookings" asp-action="Create" class="btn btn-sm btn-warning mt-1">New Booking</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Quick Actions + Recent Bookings -->
+<div class="row g-3">
+    <!-- Quick Actions -->
+    <div class="col-lg-3">
+        <div class="card border-0 shadow-sm h-100">
+            <div class="card-header bg-transparent fw-semibold border-bottom">
+                <i class="bi bi-lightning-charge me-2 text-warning"></i>Quick Actions
+            </div>
+            <div class="card-body d-grid gap-2">
+                <a asp-controller="Bookings" asp-action="Create" class="btn btn-primary">
+                    <i class="bi bi-plus-circle me-2"></i>New Booking
+                </a>
+                <a asp-controller="Venues" asp-action="Create" class="btn btn-outline-primary">
+                    <i class="bi bi-building-add me-2"></i>Add Venue
+                </a>
+                <a asp-controller="Events" asp-action="Create" class="btn btn-outline-purple">
+                    <i class="bi bi-calendar-plus me-2"></i>Add Event
+                </a>
+                <hr />
+                <a asp-controller="Venues" asp-action="Index" class="btn btn-outline-secondary">
+                    <i class="bi bi-building me-2"></i>View All Venues
+                </a>
+                <a asp-controller="Events" asp-action="Index" class="btn btn-outline-secondary">
+                    <i class="bi bi-stars me-2"></i>View All Events
+                </a>
+                <a asp-controller="Bookings" asp-action="Index" class="btn btn-outline-secondary">
+                    <i class="bi bi-journal-check me-2"></i>View All Bookings
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Recent Bookings -->
+    <div class="col-lg-9">
+        <div class="card border-0 shadow-sm">
+            <div class="card-header bg-transparent fw-semibold border-bottom d-flex justify-content-between align-items-center">
+                <span><i class="bi bi-clock-history me-2 text-primary"></i>Recent Bookings</span>
+                <a asp-controller="Bookings" asp-action="Index" class="btn btn-sm btn-outline-primary">View All</a>
+            </div>
+            <div class="card-body p-0">
+                @if (!Model.Any())
+                {
+                    <div class="text-center py-5 text-muted">
+                        <i class="bi bi-journal-x fs-1 d-block mb-2"></i>
+                        No bookings yet. <a asp-controller="Bookings" asp-action="Create">Create the first one.</a>
+                    </div>
+                }
+                else
+                {
+                    <div class="table-responsive">
+                        <table class="table table-hover align-middle mb-0">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>Reference</th>
+                                    <th>Customer</th>
+                                    <th>Event</th>
+                                    <th>Venue</th>
+                                    <th>Dates</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var b in Model)
+                                {
+                                    <tr>
+                                        <td><span class="badge bg-primary">@b.BookingReference</span></td>
+                                        <td>
+                                            <div class="fw-semibold">@b.CustomerName</div>
+                                            <div class="text-muted small">@b.CustomerEmail</div>
+                                        </td>
+                                        <td>@b.Event?.Name</td>
+                                        <td>@b.Venue?.Name</td>
+                                        <td class="small text-muted">
+                                            @b.StartDate.ToString("dd MMM") – @b.EndDate.ToString("dd MMM yyyy")
+                                        </td>
+                                        <td>
+                                            <a asp-controller="Bookings" asp-action="Details" asp-route-id="@b.BookingId"
+                                               class="btn btn-sm btn-outline-secondary">
+                                                <i class="bi bi-eye"></i>
+                                            </a>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>

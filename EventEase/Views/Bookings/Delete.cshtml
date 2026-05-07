@@ -1,0 +1,54 @@
+@model EventEase.Models.Booking
+@{
+    ViewData["Title"] = "Cancel Booking";
+}
+
+<div class="row justify-content-center">
+    <div class="col-lg-6">
+        <div class="card border-0 shadow-sm">
+            <div class="card-header bg-danger text-white fw-semibold">
+                <i class="bi bi-x-circle-fill me-2"></i>Cancel Booking — @Model.BookingReference
+            </div>
+            <div class="card-body p-4">
+                <div class="alert alert-warning d-flex gap-2">
+                    <i class="bi bi-exclamation-triangle fs-5 flex-shrink-0"></i>
+                    <div>
+                        Are you sure you want to cancel and delete this booking? This action cannot be undone.
+                    </div>
+                </div>
+
+                <dl class="row">
+                    <dt class="col-sm-5 text-muted">Booking Reference</dt>
+                    <dd class="col-sm-7"><span class="badge bg-primary">@Model.BookingReference</span></dd>
+
+                    <dt class="col-sm-5 text-muted">Customer</dt>
+                    <dd class="col-sm-7 fw-semibold">@Model.CustomerName</dd>
+
+                    <dt class="col-sm-5 text-muted">Email</dt>
+                    <dd class="col-sm-7">@Model.CustomerEmail</dd>
+
+                    <dt class="col-sm-5 text-muted">Event</dt>
+                    <dd class="col-sm-7">@Model.Event?.Name</dd>
+
+                    <dt class="col-sm-5 text-muted">Venue</dt>
+                    <dd class="col-sm-7">@Model.Venue?.Name</dd>
+
+                    <dt class="col-sm-5 text-muted">Dates</dt>
+                    <dd class="col-sm-7">@Model.StartDate.ToString("dd MMM yyyy") – @Model.EndDate.ToString("dd MMM yyyy")</dd>
+                </dl>
+
+                <div class="d-flex gap-2 mt-3">
+                    <form asp-action="Delete" method="post">
+                        <input asp-for="BookingId" type="hidden" />
+                        <button type="submit" class="btn btn-danger">
+                            <i class="bi bi-trash me-2"></i>Yes, Cancel Booking
+                        </button>
+                    </form>
+                    <a asp-action="Index" class="btn btn-outline-secondary">
+                        <i class="bi bi-arrow-left me-2"></i>Keep Booking
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

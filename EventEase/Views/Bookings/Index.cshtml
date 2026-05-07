@@ -1,0 +1,143 @@
+@model IEnumerable<EventEase.Models.BookingDetailsViewModel>
+@{
+    ViewData["Title"] = "Bookings";
+    string searchTerm = ViewBag.SearchTerm ?? "";
+}
+
+<div class="d-flex align-items-center justify-content-between mb-4">
+    <h2 class="fw-bold mb-0"><i class="bi bi-journal-check text-primary me-2"></i>Bookings</h2>
+    <a asp-action="Create" class="btn btn-primary">
+        <i class="bi bi-plus-circle me-2"></i>New Booking
+    </a>
+</div>
+
+<!-- Search Bar -->
+<div class="card border-0 shadow-sm mb-4">
+    <div class="card-body py-3">
+        <form asp-action="Index" method="get" class="d-flex gap-2 align-items-center">
+            <div class="input-group">
+                <span class="input-group-text bg-white border-end-0">
+                    <i class="bi bi-search text-muted"></i>
+                </span>
+                <input type="text" name="searchTerm" value="@searchTerm"
+                       class="form-control border-start-0 ps-0"
+                       placeholder="Search by Booking ID (e.g. BK000001), Event Name or Customer Name…" />
+            </div>
+            <button type="submit" class="btn btn-primary px-4">Search</button>
+            @if (!string.IsNullOrWhiteSpace(searchTerm))
+            {
+                <a asp-action="Index" class="btn btn-outline-secondary">
+                    <i class="bi bi-x-circle me-1"></i>Clear
+                </a>
+            }
+        </form>
+        @if (!string.IsNullOrWhiteSpace(searchTerm))
+        {
+            <p class="text-muted small mt-2 mb-0">
+                Showing <strong>@Model.Count()</strong> result(s) for "<em>@searchTerm</em>"
+            </p>
+        }
+    </div>
+</div>
+
+@if (!Model.Any())
+{
+    <div class="card border-0 shadow-sm">
+        <div class="card-body text-center py-5 text-muted">
+            <i class="bi bi-journal-x fs-1 d-block mb-3"></i>
+            @if (!string.IsNullOrWhiteSpace(searchTerm))
+            {
+                <h5>No bookings found for "@searchTerm"</h5>
+                <p>Try a different search term or <a asp-action="Index">view all bookings</a>.</p>
+            }
+            else
+            {
+                <h5>No bookings yet</h5>
+                <p>Create the first booking to get started.</p>
+                <a asp-action="Create" class="btn btn-primary">
+                    <i class="bi bi-plus-circle me-2"></i>New Booking
+                </a>
+            }
+        </div>
+    </div>
+}
+else
+{
+    <div class="card border-0 shadow-sm">
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-hover align-middle mb-0">
+                    <thead class="table-light">
+                        <tr>
+                            <th style="width:120px;">Reference</th>
+                            <th>Event</th>
+                            <th>Venue</th>
+                            <th>Customer</th>
+                            <th>Dates</th>
+                            <th style="width:60px;">Cap.</th>
+                            <th style="width:130px;" class="text-end">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var b in Model)
+                        {
+                            <tr>
+                                <td>
+                                    <span class="badge bg-primary fs-7">@b.BookingReference</span>
+                                    <div class="text-muted" style="font-size:0.7rem;">@b.BookingDate.ToString("dd MMM yy")</div>
+                                </td>
+                                <td>
+                                    <div class="fw-semibold">@b.EventName</div>
+                                    <div class="text-muted small">
+                                        <i class="bi bi-calendar-range me-1"></i>
+                                        @b.EventStartDate.ToString("dd MMM") – @b.EventEndDate.ToString("dd MMM yyyy")
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="fw-semibold">@b.VenueName</div>
+                                    <div class="text-muted small">
+                                        <i class="bi bi-geo-alt me-1"></i>@b.VenueLocation
+                                    </div>
+                                </td>
+                                <td>
+                                    <div>@b.CustomerName</div>
+                                    <div class="text-muted small">@b.CustomerEmail</div>
+                                    @if (!string.IsNullOrWhiteSpace(b.CustomerPhone))
+                                    {
+                                        <div class="text-muted small"><i class="bi bi-telephone me-1"></i>@b.CustomerPhone</div>
+                                    }
+                                </td>
+                                <td class="small">
+                                    <i class="bi bi-calendar-check me-1 text-success"></i>@b.StartDate.ToString("dd MMM yyyy")<br />
+                                    <i class="bi bi-calendar-x me-1 text-danger"></i>@b.EndDate.ToString("dd MMM yyyy")
+                                </td>
+                                <td class="text-center small">
+                                    @b.VenueCapacity.ToString("N0")
+                                </td>
+                                <td class="text-end">
+                                    <div class="btn-group btn-group-sm">
+                                        <a asp-action="Details" asp-route-id="@b.BookingId"
+                                           class="btn btn-outline-primary" title="Details">
+                                            <i class="bi bi-eye"></i>
+                                        </a>
+                                        <a asp-action="Edit" asp-route-id="@b.BookingId"
+                                           class="btn btn-outline-secondary" title="Edit">
+                                            <i class="bi bi-pencil"></i>
+                                        </a>
+                                        <a asp-action="Delete" asp-route-id="@b.BookingId"
+                                           class="btn btn-outline-danger" title="Cancel">
+                                            <i class="bi bi-trash"></i>
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="card-footer bg-transparent text-muted small">
+            Showing @Model.Count() booking(s)
+        </div>
+    </div>
+}
